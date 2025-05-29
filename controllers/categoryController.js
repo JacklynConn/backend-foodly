@@ -1,3 +1,4 @@
+const { get } = require("mongoose");
 const Category = require("../models/Category");
 
 module.exports = {
@@ -9,6 +10,43 @@ module.exports = {
         status: true,
         message: "Category created successfully",
       });
+    } catch (err) {
+      res.status(500).json({
+        status: false,
+        error: err.message,
+      });
+    }
+  },
+
+  getAllCategories: async (req, res) => {
+    try {
+      const categories = await Category.find(
+        { title: { $ne: "More" } },
+        { __v: 0 }
+      );
+      res.status(200).json(categories);
+    } catch (err) {
+      res.status(500).json({
+        status: false,
+        error: err.message,
+      });
+    }
+  },
+
+  getRandomCategory: async (req, res) => {
+    try {
+      let categories = await Category.aggregate([
+        { $match: { value: { $ne: "More" } } },
+        { $sample: { size: 4 } },
+      ]);
+      const moreCategory = await Category.findOne(
+        { value: "More" },
+        { __v: 0 }
+      );
+      if (moreCategory) {
+        categories.push(moreCategory);
+      }
+      res.status(200).json(categories);
     } catch (err) {
       res.status(500).json({
         status: false,
