@@ -15,8 +15,6 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/api/category", categoryRoutes);
-
-// restaurant routes
 app.use("/api/restaurant", restaurant);
 
 

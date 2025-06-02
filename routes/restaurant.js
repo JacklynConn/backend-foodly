@@ -3,7 +3,7 @@ const restaurantController = require("../controllers/restaurantController");
 
 router.post("/", restaurantController.addRestaurant);
 
-router.get("/:id", restaurantController.getRestaurantById);
+router.get("/byId/:id", restaurantController.getRestaurantById);
 
 router.get("/:code", restaurantController.getRandomRestaurants);
 

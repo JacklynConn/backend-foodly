@@ -58,12 +58,14 @@ module.exports = {
       if (code) {
         randomRestaurant = await Restaurant.aggregate([
           { $match: { code: code, isAvailable: true } },
+          { $sample: { size: 5 } },
           { $project: { __v: 0 } },
         ]);
       }
       if (randomRestaurant.length === 0) {
         randomRestaurant = await Restaurant.aggregate([
           { $match: { isAvailable: true } },
+          { $sample: { size: 5 } },
           { $project: { __v: 0 } },
         ]);
       }
@@ -83,14 +85,12 @@ module.exports = {
       if (code) {
         allNearByRestaurants = await Restaurant.aggregate([
           { $match: { code: code, isAvailable: true } },
-          { $sample: { size: 5 } },
           { $project: { __v: 0 } },
         ]);
       }
       if (allNearByRestaurants.length === 0) {
         allNearByRestaurants = await Restaurant.aggregate([
           { $match: { isAvailable: true } },
-          { $sample: { size: 5 } },
           { $project: { __v: 0 } },
         ]);
       }
