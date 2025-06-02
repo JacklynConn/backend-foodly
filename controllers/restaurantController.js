@@ -31,10 +31,10 @@ module.exports = {
         message: "Restaurant created successfully",
       });
     } catch (err) {
-        res.status(500).json({
-            status: false,
-            error: err.message,
-        });
+      res.status(500).json({
+        status: false,
+        error: err.message,
+      });
     }
   },
 
@@ -51,10 +51,55 @@ module.exports = {
     }
   },
 
-  getAllNearbyRestaurants: async (req, res) => {
+  getRandomRestaurants: async (req, res) => {
+    const code = req.params.code;
+    try {
+      let randomRestaurant = [];
+      if (code) {
+        randomRestaurant = await Restaurant.aggregate([
+          { $match: { code: code, isAvailable: true } },
+          { $project: { __v: 0 } },
+        ]);
+      }
+      if (randomRestaurant.length === 0) {
+        randomRestaurant = await Restaurant.aggregate([
+          { $match: { isAvailable: true } },
+          { $project: { __v: 0 } },
+        ]);
+      }
+      res.status(200).json(randomRestaurant);
+    } catch (err) {
+      res.status(500).json({
+        status: false,
+        message: err.message,
+      });
+    }
   },
 
-  getRandomRestaurants: async (req, res) => {
-    
+  getAllNearbyRestaurants: async (req, res) => {
+    const code = req.params.code;
+    try {
+      let allNearByRestaurants = [];
+      if (code) {
+        allNearByRestaurants = await Restaurant.aggregate([
+          { $match: { code: code, isAvailable: true } },
+          { $sample: { size: 5 } },
+          { $project: { __v: 0 } },
+        ]);
+      }
+      if (allNearByRestaurants.length === 0) {
+        allNearByRestaurants = await Restaurant.aggregate([
+          { $match: { isAvailable: true } },
+          { $sample: { size: 5 } },
+          { $project: { __v: 0 } },
+        ]);
+      }
+      res.status(200).json(allNearByRestaurants);
+    } catch (err) {
+      res.status(500).json({
+        status: false,
+        message: err.message,
+      });
+    }
   },
 };
