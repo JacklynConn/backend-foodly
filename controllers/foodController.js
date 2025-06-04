@@ -1,4 +1,3 @@
-const { messaging } = require("firebase-admin");
 const Food = require("../models/Food");
 
 module.exports = {
@@ -101,7 +100,80 @@ module.exports = {
                 message: err.message,
             });
         }
-    }
+    },
 
+    getFoodsByCategoryAndCode: async (req, res) => {
+        const { category, code } = req.params;
+        try {
+            const foods = await Food.aggregate([
+                { $match: { category: category, code: code, isAvailable: true } },
+                { $project: { __v: 0 } },
+            ]);
 
+            if (foods.length === 0) {
+                return res.status(200).json([]);
+            }
+            res.status(200).json(foods);
+        } catch (err) {
+            res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
+
+    searchFoods: async (req, res) => {
+        const search = req.params.search;
+        try {
+            const result = await Food.aggregate([
+                {
+                    $search: {
+                        index: "foods",
+                        text: {
+                            query: search,
+                            path: {
+                                wildcard: "*",
+                            },
+                        }
+                    }
+                },
+            ]);
+            res.status(200).json(result);
+        } catch (err) {
+            res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
+
+    getRandomFoodsByCategoryCode: async (req, res) => {
+        const { category, code } = req.params;
+        try {
+            let foods;
+
+            foods = await Food.aggregate([
+                { $match: { category: category, code: code, isAvailable: true } },
+                { $sample: { size: 10 } },
+            ]);
+
+            if (!foods || foods.length === 0) {
+                foods = await Food.aggregate([
+                    { $match: { code: code, isAvailable: true } },
+                    { $sample: { size: 10 } },
+                ]);
+            } else if (!foods || foods.length === 0) {
+                foods = await Food.aggregate([
+                    { $match: { isAvailable: true } },
+                    { $sample: { size: 10 } },
+                ]);
+            }
+            res.status(200).json(foods);
+        } catch (err) {
+            res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
 };
