@@ -21,7 +21,7 @@ app.use("/api/foods", foodRoutes);
 
 
 app.listen(process.env.PORT || 6013, () =>
-  console.log(`Foodly Backend is running on port ${process.env.PORT || 6013}!`)
+  console.log(`port: http://localhost:${process.env.PORT || 6013}`)
 );
 
 // 175.100.53.171
