@@ -60,17 +60,25 @@ module.exports = {
     },
 
     loginUser: async (req, res) => {
-        const { email, password } = req.body;
-
-        if (!email || !password) {
+        const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+        if (!emailRegex.test(req.body.email)) {
             return res.status(400).json({
                 status: false,
-                message: "Email and password are required"
+                message: "Email is not valid"
+            });
+        }
+
+        const minPasswordLength = 8;
+
+        if (req.body.password.length < minPasswordLength) {
+            return res.status(400).json({
+                status: false,
+                message: `Password must be at least ${minPasswordLength} characters long`
             });
         }
 
         try {
-            const user = await User.findOne({ email: email });
+            const user = await User.findOne({ email: req.body.email });
             if (!user) {
                 return res.status(404).json({
                     status: false,
@@ -78,28 +86,30 @@ module.exports = {
                 });
             }
 
-            const decryptedPassword = CryptoJs.AES.decrypt(user.password, process.env.SECRET).toString(CryptoJs.enc.Utf8);
-            if (decryptedPassword !== password) {
-                return res.status(401).json({
+            const hashedPassword = CryptoJs.AES.decrypt(user.password, process.env.SECRET);
+            const originalPassword = hashedPassword.toString(CryptoJs.enc.Utf8);
+
+            if (originalPassword !== req.body.password) {
+                return res.status(400).json({
                     status: false,
-                    message: "Invalid password"
+                    message: "Wrong password"
                 });
             }
 
-            const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1d' });
-
-            return res.status(200).json({
-                status: true,
-                message: "Login successful",
-                token: token,
+            const userToken = jwt.sign({
+                id: user._id,
                 userType: user.userType,
-                profile: user.profile
-            });
+                email: user.email,
+            }, process.env.JWT_SECRET, { expiresIn: "21d" });
+
+            const { password, otp, ...others } = user.doc;
+
+            res.status(200).json({ ...others, userToken });
         } catch (err) {
             return res.status(500).json({
                 status: false,
                 message: err.message
             });
         }
-    },
+    }
 }
