@@ -5,6 +5,7 @@ const mongoose = require("mongoose");
 const categoryRoutes = require("./routes/category");
 const restaurantRoutes = require("./routes/restaurant");
 const foodRoutes = require("./routes/food");
+const ratingRoutes = require("./routes/rating");
 
 dotenv.config();
 
@@ -18,6 +19,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use("/api/category", categoryRoutes);
 app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/foods", foodRoutes);
+app.use("/api/rating", ratingRoutes);
 
 
 app.listen(process.env.PORT || 6013, () =>

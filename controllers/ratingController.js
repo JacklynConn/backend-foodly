@@ -5,7 +5,7 @@ const Food = require('../models/Food');
 module.exports = {
     addRating: async (req, res) => {
         const newRating = new Rating({
-            userId: req.body.userId,
+            userId: req.user.id,
             ratingType: req.body.ratingType,
             product: req.body.product,
             rating: req.body.rating
@@ -47,5 +47,34 @@ module.exports = {
         }
     },
 
-    
+    checkUserRating: async (req, res) => {
+        const ratingType = req.query.ratingType;
+        const product = req.query.product;
+
+        try {
+            const existingRating = await Rating.findOne({
+                userId: req.user.id,
+                product: product,
+                ratingType: ratingType,
+            });
+
+            if (existingRating) {
+                return res.status(200).json({
+                    status: true,
+                    message: "You have already rated this restaurant",
+                    rating: existingRating.rating
+                });
+            } else {
+                return res.status(404).json({
+                    status: false,
+                    message: "You have not rated this restaurant"
+                });
+            }
+        } catch (err) {
+            return res.status(500).json({
+                status: false,
+                message: err.message
+            });
+        }
+    }
 }
