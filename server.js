@@ -6,6 +6,7 @@ const categoryRoutes = require("./routes/category");
 const restaurantRoutes = require("./routes/restaurant");
 const foodRoutes = require("./routes/food");
 const ratingRoutes = require("./routes/rating");
+const generateOTP = require("./utils/otp_generate");
 
 dotenv.config();
 
