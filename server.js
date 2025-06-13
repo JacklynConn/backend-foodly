@@ -4,8 +4,7 @@ const dotenv = require("dotenv");
 const mongoose = require("mongoose");
 const categoryRoutes = require("./routes/category");
 const restaurantRoutes = require("./routes/restaurant");
-const foodRoutes = require("./routes/food");
-const ratingRoutes =                                                                                                                                                                             ("./routes/rating");
+const foodRoutes = require("./routes/food");                                                                                                                                                                     ("./routes/rating");
 const sendEmail = require("./utils/smtp_function");
 const generateOTP = require("./utils/otp_generate");
 
