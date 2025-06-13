@@ -14,7 +14,7 @@ async function sendEmail(userEmail, message) {
         to: userEmail,
         subject: "Foodly Verification Code",
         html: `<h1>Foodly Email Verification</h1>
-    <p>Your verification code is :< /p>
+    <p>Your verification code is :</p>
     <h2 style="color: blue;">${message}</h2>
     <p>Please enter this code on the verification page to complete your registration process.</p>
     <p>If you did not request this, please ignore this email.</p>`,
@@ -22,12 +22,10 @@ async function sendEmail(userEmail, message) {
 
     try {
         await transporter.sendMail(mailOptions);
-        console.log('Verification email sent');
+        console.log('Verification email sent ');
     } catch (error) {
         console.error('Email sending failed with an error:', error);
     }
- 
-    
 }
 
 module.exports = sendEmail;

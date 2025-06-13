@@ -5,15 +5,21 @@ const mongoose = require("mongoose");
 const categoryRoutes = require("./routes/category");
 const restaurantRoutes = require("./routes/restaurant");
 const foodRoutes = require("./routes/food");
-const ratingRoutes = require("./routes/rating");
+const ratingRoutes =                                                                                                                                                                             ("./routes/rating");
+const sendEmail = require("./utils/smtp_function");
 const generateOTP = require("./utils/otp_generate");
+
 
 dotenv.config();
 
 mongoose
   .connect(process.env.MONGOURL)
   .then(() => console.log("Foodly Backend is connected to MongoDB!"))
-  .catch((err) => {err});
+  .catch((err) => { err });
+
+const otp = generateOTP();
+console.log(`Generated OTP: ${otp}`);
+sendEmail('makmach1122@gmail.com', otp);
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
