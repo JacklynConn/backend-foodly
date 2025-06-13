@@ -18,12 +18,11 @@ const UserSchema = new mongoose.Schema({
         required: true,
         default: "Client",
         enum: ["Client", "Admin", "Vendor", "Driver"],
-    },
+    },    
     profile: {
         type: String,
         default: "https://th.bing.com/th/id/OIP.kN8tEO6_wPf1PMEofLrdTgHaGh?rs=1&pid=ImgDetMainhttps://th.bing.com/th/id/OIP.kN8tEO6_wPf1PMEofLrdTgHaGh?rs=1&pid=ImgDetMain",
     },
-    timestamps: true,
-});
+}, { timestamps: true });
 
 module.exports = mongoose.model("User", UserSchema);
