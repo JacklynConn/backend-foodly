@@ -75,5 +75,22 @@ module.exports = {
                 message: err.message,
             });
         }
-    }
+    },
+
+    deleteUser: async (req, res) => {
+
+        try {
+            await User.findByIdAndDelete(req.user.id);
+
+            res.status(200).json({
+                status: true,
+                message: "User deleted successfully",
+            });
+        } catch (err) {
+            return res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
 }

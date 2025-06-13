@@ -6,7 +6,8 @@ const categoryRoutes = require("./routes/category");
 const restaurantRoutes = require("./routes/restaurant");
 const foodRoutes = require("./routes/food");  
 const ratingRoute = require("./routes/rating"); 
-const authRoute = require("./routes/auth");                                                                                                                                                           ("./routes/rating");
+const authRoute = require("./routes/auth");
+const userRoute = require("./routes/user");                                                                                                                                                         ("./routes/rating");
 // const sendEmail = require("./utils/smtp_function");
 // const generateOTP = require("./utils/otp_generate");
 
@@ -24,7 +25,8 @@ mongoose
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use("/api/auth", authRoute);
+app.use("/", authRoute);
+app.use("/users", userRoute);
 app.use("/api/category", categoryRoutes);
 app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/foods", foodRoutes);
