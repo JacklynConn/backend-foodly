@@ -58,5 +58,54 @@ module.exports = {
             });
         }
     },
+
+    setDefaultAddress: async (req, res) => {
+        const addressId = req.params.id
+        const userId = req.user.id;
+        try {
+            await Address.updateMany(
+                { userId: userId },
+                { default: false }
+            );
+            const updatedAddress = await Address.findByIdAndUpdate(
+                addressId,
+                { default: true }
+            );
+            if (updatedAddress) {
+                await User.findByIdAndUpdate(
+                    userId,
+                    { address: addressId }
+                );
+                res.status(200).json({
+                    status: true,
+                    message: "Default address set successfully",
+                });
+            } else {
+                res.status(404).json({
+                    status: false,
+                    message: "Address not found",
+                });
+            }
+        } catch (err) {
+            res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
+
+    getDefaultAddress: async (req, res) => {
+        const userId = req.user.id;
+        try {
+            const address = await Address.findOne({ userId: userId, default: true });
+
+            res.status(200).json(address);
+        } catch (err) {
+            res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
 };
 
