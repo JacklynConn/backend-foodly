@@ -30,8 +30,8 @@ module.exports = {
             }
 
             if (userOtp === user.otp) {
-                user.isVerified = true;
-                user.otp = null; // Clear OTP after verification
+                user.verification = true; // Set verification to true
+                user.otp = "none"; // Clear OTP after verification
                 await user.save();
 
                 const { password, __v, otp, createdAt, ...others } = user._doc;

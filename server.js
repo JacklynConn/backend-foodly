@@ -26,7 +26,7 @@ mongoose
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use("/", authRoute);
-app.use("/users", userRoute);
+app.use("/api/users", userRoute);
 app.use("/api/category", categoryRoutes);
 app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/foods", foodRoutes);
