@@ -6,7 +6,7 @@ const { verifyTokenAndAuthorization } = require("../middleware/verifyToken");
 router.post("/", verifyTokenAndAuthorization, addressController.addAddress);
 router.get("/default", verifyTokenAndAuthorization, addressController.getDefaultAddress);
 // get all addresses
-router.get("/", verifyTokenAndAuthorization, addressController.getAllAddresses);
+router.get("/", verifyTokenAndAuthorization, addressController.getAddresses);
 // delete address by id
 router.delete("/:id", verifyTokenAndAuthorization, addressController.deleteAddress);
 // set default address by id
