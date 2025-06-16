@@ -42,12 +42,12 @@ module.exports = {
         const cartItemId = req.params.id;
         const userId = req.user.id;
 
-        try{
-            await Cart.findByIdAndDelete({_id: cartItemId});
+        try {
+            await Cart.findByIdAndDelete({ _id: cartItemId });
             const count = await Cart.countDocuments({ userId: userId });
 
             res.status(200).json({ status: true, count: count });
-        }catch(error){
+        } catch (error) {
             res.status(500).json({ status: false, message: error.message });
         }
     },
@@ -64,8 +64,8 @@ module.exports = {
                     select: "time coords"
                 }
             });
-            
-            res.status(200).json({cartItems: cartItems });
+
+            res.status(200).json({ cartItems: cartItems });
         } catch (error) {
             res.status(500).json({ status: false, message: error.message });
         }
@@ -82,5 +82,33 @@ module.exports = {
         }
     },
 
-    
+    decrementProductQuantity: async (req, res) => {
+        const cartItemId = req.params.id;
+        const userId = req.user.id;
+
+        try {
+            const cartItem = await Cart.findById(cartItemId);
+
+            if (cartItem) {
+                const productPrice = cartItem.totalPrice / cartItem.quantity; // Calculate price per item
+
+                if (cartItem.quantity > 1) {
+                    // If quantity is greater than 1, decrement it
+                    cartItem.quantity -= 1;
+                    cartItem.totalPrice -= productPrice; // Decrement total price by price per item
+                    await cartItem.save();
+                    res.status(200).json({ status: true, message: "Product quantity successfully decremented" });
+                } else {
+                    // If quantity is 1, remove the item from the cart
+                    await Cart.findByIdAndDelete({ _id: cartItemId });
+
+                    res.status(200).json({ status: true, message: "Product successfully removed from cart" });
+                }
+            } else {
+                res.status(404).json({ status: false, message: "Cart item not found" });
+            }
+        } catch (error) {
+            res.status(500).json({ status: false, message: error.message });
+        }
+    }
 }; 
