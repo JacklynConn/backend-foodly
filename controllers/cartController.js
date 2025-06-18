@@ -1,4 +1,3 @@
-const { get } = require("mongoose");
 const Cart = require("../models/cart");
 
 module.exports = {
@@ -65,7 +64,7 @@ module.exports = {
                 }
             });
 
-            res.status(200).json({ cartItems: cartItems });
+            res.status(200).json(cartItems);
         } catch (error) {
             res.status(500).json({ status: false, message: error.message });
         }
@@ -84,7 +83,6 @@ module.exports = {
 
     decrementProductQuantity: async (req, res) => {
         const cartItemId = req.params.id;
-        const userId = req.user.id;
 
         try {
             const cartItem = await Cart.findById(cartItemId);

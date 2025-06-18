@@ -10,7 +10,8 @@ const authRoute = require("./routes/auth");
 const userRoute = require("./routes/user"); 
 // const sendEmail = require("./utils/smtp_function");
 // const generateOTP = require("./utils/otp_generate");
-const addressRoute = require("./routes/address");                                                                                                                                                       ("./routes/rating");
+const addressRoute = require("./routes/address");   
+const cartRoute = require("./routes/cart");                                                                                                                                                    ("./routes/rating");
 
 
 dotenv.config();
@@ -20,6 +21,7 @@ mongoose
   .then(() => console.log("Foodly Backend is connected to MongoDB!"))
   .catch((err) => { err });
 
+// testing email functionality
 // const otp = generateOTP();
 // console.log(`Generated OTP: ${otp}`);
 // sendEmail('makmach1122@gmail.com', otp);
@@ -33,6 +35,7 @@ app.use("/api/restaurant", restaurantRoutes);
 app.use("/api/foods", foodRoutes);
 app.use("/api/rating", ratingRoute);
 app.use("/api/address", addressRoute);
+app.use("/api/cart", cartRoute);
 
 app.listen(process.env.PORT || 6013, () =>
   console.log(`port: http://localhost:${process.env.PORT || 6013}`)
