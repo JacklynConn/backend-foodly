@@ -11,8 +11,8 @@ const userRoute = require("./routes/user");
 // const sendEmail = require("./utils/smtp_function");
 // const generateOTP = require("./utils/otp_generate");
 const addressRoute = require("./routes/address");   
-const cartRoute = require("./routes/cart");                                                                                                                                                    ("./routes/rating");
-
+const cartRoute = require("./routes/cart");
+const orderRoute = require("./routes/order");
 
 dotenv.config();
 
@@ -36,6 +36,7 @@ app.use("/api/foods", foodRoutes);
 app.use("/api/rating", ratingRoute);
 app.use("/api/address", addressRoute);
 app.use("/api/cart", cartRoute);
+app.use("/api/order", orderRoute);
 
 app.listen(process.env.PORT || 6013, () =>
   console.log(`port: http://localhost:${process.env.PORT || 6013}`)
