@@ -62,6 +62,20 @@ module.exports = {
         }
     },
 
+    // get all foods by code
+    getAllFoodsByCode: async (req, res) => {
+        const code = req.params.code;
+        try {
+            const foods = await Food.find({ code: code });
+            res.status(200).json(foods);
+        } catch (err) {
+            res.status(500).json({
+                status: false,
+                message: err.message,
+            });
+        }
+    },
+
     // get random food for recommendation
     getRandomFood: async (req, res) => {
         try {

@@ -12,7 +12,7 @@ module.exports = {
     } catch (err) {
       res.status(500).json({
         status: false,
-        error: err.message,
+        message: err.message,
       });
     }
   },
@@ -27,7 +27,7 @@ module.exports = {
     } catch (err) {
       res.status(500).json({
         status: false,
-        error: err.message,
+        message: err.message,
       });
     }
   },
@@ -35,11 +35,11 @@ module.exports = {
   getRandomCategory: async (req, res) => {
     try {
       let categories = await Category.aggregate([
-        { $match: { value: { $ne: "More" } } },
-        { $sample: { size: 5 } },
+        { $match: { value: { $ne: "more" } } },
+        { $sample: { size: 4 } },
       ]);
       const moreCategory = await Category.findOne(
-        { value: "More" },
+        { value: "more" },
         { __v: 0 }
       );
       if (moreCategory) {
@@ -49,7 +49,7 @@ module.exports = {
     } catch (err) {
       res.status(500).json({
         status: false,
-        error: err.message,
+        message: err.message,
       });
     }
   },
